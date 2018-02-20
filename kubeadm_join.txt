@@ -1,0 +1,6 @@
+
+root@k01:~# kubeadm token create 
+root@k01:~# kubeadm token list
+TOKEN                     TTL       EXPIRES                     USAGES                   DESCRIPTION   EXTRA GROUPS
+1a80ec.f8b494c8afdd9338   23h       2018-02-21T19:06:05+09:00   authentication,signing   <none>        system:bootstrappers:kubeadm:default-node-token
+root@k03:~# kubeadm join --token 1a80ec.f8b494c8afdd9338 10.1.0.201:6443 --discovery-token-unsafe-skip-ca-verification

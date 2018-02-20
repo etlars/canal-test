@@ -1,0 +1,119 @@
+docker run --net=host  -it --rm --name=iperf3-server networkstatic/iperf3 -c 10.1.0.203 -p 5203
+docker run  -it --rm -p 5204:5204   --name=iperf3-client networkstatic/iperf3 -c 10.1.0.203 -p 5204
+
+docker run --net=host  -it --rm --name=iperf3-server networkstatic/iperf3 -s -p 5203
+docker run  -it --rm -p 5204:5204 --name=iperf3-server networkstatic/iperf3 -s -p 5204
+
+root@k01:/etc/kubernetes/pki# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+5ea416f6e97f        bridge              bridge              local
+18ae13eea84c        host                host                local
+6d5a83ada6d3        none                null                local
+root@k01:/etc/kubernetes/pki# docker network inspect 5ea416f6e97f
+[
+    {
+        "Name": "bridge",
+        "Id": "5ea416f6e97fa1450497ad74cc6cd57d5337e95a77154bffb4e1e2cf47519173",
+        "Created": "2018-02-19T12:49:34.721619465+09:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16",
+                    "Gateway": "172.17.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Containers": {},
+        "Options": {
+            "com.docker.network.bridge.default_bridge": "true",
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "true",
+            "com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
+            "com.docker.network.bridge.name": "docker0",
+            "com.docker.network.driver.mtu": "1500"
+        },
+        "Labels": {}
+    }
+]
+root@k01:/etc/kubernetes/pki# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+5ea416f6e97f        bridge              bridge              local
+18ae13eea84c        host                host                local
+6d5a83ada6d3        none                null                local
+root@k01:/etc/kubernetes/pki# docker network inspect 18ae13eea84c
+[
+    {
+        "Name": "host",
+        "Id": "18ae13eea84cd6f57d916f567d9c7de10d87029ab823fffe219e2ad2b6a9398c",
+        "Created": "2018-02-07T01:19:10.271994871-08:00",
+        "Scope": "local",
+        "Driver": "host",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": []
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Containers": {
+            "0a2e4f67532a93173a276e3f3c3bf473467bcbe2ff1e6438bdec920796160476": {
+                "Name": "k8s_POD_kube-proxy-l4kv9_kube-system_dd861fe6-156b-11e8-bca6-000c29940135_0",
+                "EndpointID": "fdcf7db08fef4bcc0d3220f6e97d8ac00b96bd1d341762c9af24779c9cb1fe00",
+                "MacAddress": "",
+                "IPv4Address": "",
+                "IPv6Address": ""
+            },
+            "17ee6f3a5ff1707c9750a275a992aa7c5fc2379a7bceaa503bb8c8137ed1700c": {
+                "Name": "k8s_POD_canal-zqbgn_kube-system_0236d3a4-156c-11e8-bca6-000c29940135_0",
+                "EndpointID": "88117a15f8675cceaad403187dd914457fe0d0e4724cde3239e44e5b6b7d274f",
+                "MacAddress": "",
+                "IPv4Address": "",
+                "IPv6Address": ""
+            },
+            "2c0e4b7fdca1ef484ccfd93a669b640a5223602d7f36ef1f26119be1dec33a23": {
+                "Name": "k8s_POD_etcd-k01_kube-system_7278f85057e8bf5cb81c9f96d3b25320_0",
+                "EndpointID": "b0c6942a2c07b6cf58c6b07eb407abff95220992c14ebe05b31dbc403d030468",
+                "MacAddress": "",
+                "IPv4Address": "",
+                "IPv6Address": ""
+            },
+            "73de308a86b56f5903252fd027c5ab74f5a66fde7688b66fbeef6736fdc43447": {
+                "Name": "k8s_POD_kube-controller-manager-k01_kube-system_68f56133bdca478cfc1a1caa94ea90a3_0",
+                "EndpointID": "b1675a57f4cbacb9e90872f13c9ca548ecbd354d7673b46800840dbfd392e498",
+                "MacAddress": "",
+                "IPv4Address": "",
+                "IPv6Address": ""
+            },
+            "89e019137e71016a8ddf74c1b231445e7c451dd3d3e8297d8bb77a18ee7eed6f": {
+                "Name": "k8s_POD_kube-scheduler-k01_kube-system_c03f9cef0da85e04e71316bb40cf0b8e_0",
+                "EndpointID": "56ab7f2c379d81dcd1792e36fde8d3b8a70ca6c9acd21aab09b29a60a63ee5d9",
+                "MacAddress": "",
+                "IPv4Address": "",
+                "IPv6Address": ""
+            },
+            "f1766ce4a24a64386626de10ce4d8e695f21352393224429dd08c7f6de04e675": {
+                "Name": "k8s_POD_kube-apiserver-k01_kube-system_63e0b3d685a89eff22b23f0d0eb9cc4d_0",
+                "EndpointID": "d5ce7b1cba4ae3314a299d6ab6283ff593a82796c660fb76cb40f3575527e1e7",
+                "MacAddress": "",
+                "IPv4Address": "",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]
+root@k01:/etc/kubernetes/pki#
+
+
+
+
+
