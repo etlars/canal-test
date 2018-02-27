@@ -1,0 +1,107 @@
+https://store.docker.com/community/images/mlabbe/iperf3
+
+
+root@k01:~/work/iperf# kubectl run iperfs --image=mlabbe/iperf3
+root@k01:~/work/iperf# kubectl run iperfs --image=mlabbe/iperf3
+root@k01:~/work/iperf# kubectl get po -o wide
+NAME                               READY     STATUS    RESTARTS   AGE       IP            NODE
+iperfc-757995fccd-ftv6s            1/1       Running   0          1m        10.244.2.16   k03
+iperfs-845cb8898b-8qtl7            1/1       Running   0          36s       10.244.1.33   k02
+net-test-client-869d4d84c4-ssxhn   1/1       Running   0          20m       10.244.1.29   k02
+root@k01:~/work/iperf#
+root@k01:~/work/iperf#
+root@k01:~/work/iperf#
+root@k01:~/work/iperf#
+root@k01:~/work/iperf# kubectl exec -it iperfc-757995fccd-ftv6s -- /bin/sh
+/ $ iperf3 -c 10.244.1.33 -p 5202
+Connecting to host 10.244.1.33, port 5202
+[  5] local 10.244.2.16 port 56374 connected to 10.244.1.33 port 5202
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.01   sec   116 MBytes   968 Mbits/sec   28    420 KBytes
+[  5]   1.01-2.00   sec   136 MBytes  1.14 Gbits/sec    0    606 KBytes
+[  5]   2.00-3.00   sec   141 MBytes  1.18 Gbits/sec    0    760 KBytes
+[  5]   3.00-4.00   sec   134 MBytes  1.12 Gbits/sec    0    882 KBytes
+[  5]   4.00-5.00   sec   132 MBytes  1.11 Gbits/sec  109    983 KBytes
+[  5]   5.00-6.00   sec   134 MBytes  1.12 Gbits/sec    0   1.05 MBytes
+[  5]   6.00-7.00   sec   131 MBytes  1.10 Gbits/sec    0   1.14 MBytes
+[  5]   7.00-8.00   sec   126 MBytes  1.06 Gbits/sec    0   1.22 MBytes
+[  5]   8.00-9.00   sec   104 MBytes   870 Mbits/sec  829    691 KBytes
+[  5]   9.00-10.00  sec   130 MBytes  1.09 Gbits/sec    0    821 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.00  sec  1.25 GBytes  1.08 Gbits/sec  966             sender
+[  5]   0.00-10.00  sec  1.25 GBytes  1.07 Gbits/sec                  receiver
+
+iperf Done.
+
+
+root@k01:~# kubectl exec -it iperfs-845cb8898b-8qtl7 -- /bin/sh
+/ $ iperf3 -s -p 5202
+-----------------------------------------------------------
+Server listening on 5202
+-----------------------------------------------------------
+Accepted connection from 10.244.2.16, port 56372
+[  5] local 10.244.1.33 port 5202 connected to 10.244.2.16 port 56374
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec   115 MBytes   968 Mbits/sec
+[  5]   1.00-2.00   sec   134 MBytes  1.12 Gbits/sec
+[  5]   2.00-3.00   sec   141 MBytes  1.18 Gbits/sec
+[  5]   3.00-4.00   sec   134 MBytes  1.13 Gbits/sec
+[  5]   4.00-5.00   sec   132 MBytes  1.11 Gbits/sec
+[  5]   5.00-6.00   sec   134 MBytes  1.13 Gbits/sec
+[  5]   6.00-7.00   sec   131 MBytes  1.10 Gbits/sec
+[  5]   7.00-8.00   sec   126 MBytes  1.06 Gbits/sec
+[  5]   8.00-9.00   sec   104 MBytes   871 Mbits/sec
+[  5]   9.00-10.00  sec   129 MBytes  1.09 Gbits/sec
+[  5]  10.00-10.00  sec   202 KBytes   864 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-10.00  sec  1.25 GBytes  1.07 Gbits/sec                  receiver
+iperf3: the client has unexpectedly closed the connection
+-----------------------------------------------------------
+Server listening on 5202
+-----------------------------------------------------------
+
+
+
+root@k01:~/work/iperf# iperf3 -c 10.244.1.33 -p 5202
+Connecting to host 10.244.1.33, port 5202
+[  4] local 10.244.0.0 port 49792 connected to 10.244.1.33 port 5202
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.01   sec   134 MBytes  1.11 Gbits/sec   37    602 KBytes
+[  4]   1.01-2.00   sec   132 MBytes  1.12 Gbits/sec    0    674 KBytes
+[  4]   2.00-3.00   sec   129 MBytes  1.08 Gbits/sec    0    725 KBytes
+[  4]   3.00-4.00   sec   130 MBytes  1.09 Gbits/sec    0    759 KBytes
+[  4]   4.00-5.00   sec   132 MBytes  1.11 Gbits/sec    0    781 KBytes
+[  4]   5.00-6.01   sec   119 MBytes   992 Mbits/sec    0    788 KBytes
+[  4]   6.01-7.00   sec   114 MBytes   960 Mbits/sec    0    788 KBytes
+[  4]   7.00-8.00   sec   122 MBytes  1.02 Gbits/sec    0    796 KBytes
+[  4]   8.00-9.01   sec   115 MBytes   962 Mbits/sec    0    796 KBytes
+[  4]   9.01-10.00  sec   115 MBytes   969 Mbits/sec    0    799 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  1.21 GBytes  1.04 Gbits/sec   37             sender
+[  4]   0.00-10.00  sec  1.21 GBytes  1.04 Gbits/sec                  receiver
+
+iperf Done.
+
+Accepted connection from 10.244.0.0, port 49790
+[  5] local 10.244.1.33 port 5202 connected to 10.244.0.0 port 49792
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec   128 MBytes  1.07 Gbits/sec
+[  5]   1.00-2.00   sec   131 MBytes  1.10 Gbits/sec
+[  5]   2.00-3.00   sec   128 MBytes  1.07 Gbits/sec
+[  5]   3.00-4.00   sec   131 MBytes  1.10 Gbits/sec
+[  5]   4.00-5.00   sec   132 MBytes  1.10 Gbits/sec
+[  5]   5.00-6.00   sec   122 MBytes  1.03 Gbits/sec
+[  5]   6.00-7.00   sec   114 MBytes   958 Mbits/sec
+[  5]   7.00-8.00   sec   122 MBytes  1.03 Gbits/sec
+[  5]   8.00-9.00   sec   114 MBytes   958 Mbits/sec
+[  5]   9.00-10.00  sec   116 MBytes   970 Mbits/sec
+[  5]  10.00-10.04  sec  3.69 MBytes   856 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-10.04  sec  1.21 GBytes  1.04 Gbits/sec                  receiver
+-----------------------------------------------------------
+Server listening on 5202
+-----------------------------------------------------------

@@ -1,0 +1,24 @@
+iperf3는 멀티캐스트를 지원하지 않는다고 합니다. https://github.com/esnet/iperf/issues/427
+그래서 iperf를 docker 이미지로 찾아야했습니다.
+https://store.docker.com/search?q=iperf&source=community&type=image
+
+root@k01:~# kubectl run iperfs --image=mlabbe/iperf
+deployment "iperfs" created
+root@k01:~# kubectl run iperfc --image=mlabbe/iperf
+deployment "iperfc" created
+
+root@k01:~# kubectl get po -o wide
+NAME                        READY     STATUS    RESTARTS   AGE       IP            NODE
+iperf3c-c95c4b998-mntw8     1/1       Running   0          1h        10.244.2.19   k03
+iperf3s-848995697d-tm8lv    1/1       Running   0          1h        10.244.1.35   k02
+iperfc-7f8bc954d5-h8g8x     1/1       Running   0          10s       10.244.2.21   k03
+iperfs-5b784d89c-grtgq      1/1       Running   0          29s       10.244.1.37   k02
+net-test-55c57d8554-k6gpx   1/1       Running   0          16h       10.244.2.17   k03
+netperfc-76d9c4b567-ckwvd   1/1       Running   0          16h       10.244.1.34   k02
+netperfs-56bb7779cf-nl54l   1/1       Running   0          16h       10.244.2.18   k03
+
+여기에 netperf는 kubectl run netperfs --image=paultiplady/netperf 로 생성했음
+
+
+kubectl exec -it iperfc-7f8bc954d5-h8g8x -- /bin/sh
+kubectl exec -it iperfs-5b784d89c-grtgq -- /bin/sh
